@@ -5,6 +5,7 @@ Shader "Anclin/Experiments/Vertex Animation"
 		_Value1( "Value 1", Float ) = 0
 		_Value2( "Value 2", Float ) = 0
 		_Value3( "Value 3", Float ) = 0
+		_Value4( "Value 4", Float) = 0
 		_MainColor("Main Color", Color) = (1.0,1.0,1.0,1.0)
 		_Rotation("Rotation", Float) = 0
 		_MainTex("Base texture", 2D) = "white" {}//テクスチャ
@@ -39,6 +40,7 @@ Shader "Anclin/Experiments/Vertex Animation"
 			uniform float _Value1;
 			uniform float _Value2;
 			uniform float _Value3;
+			uniform float _Value4;
 			uniform float4 _MainColor;
 			uniform float _Rotation;
 			sampler2D _MainTex;
@@ -62,6 +64,11 @@ Shader "Anclin/Experiments/Vertex Animation"
 
 			float4 _MainTex_ST;//?
 
+			float rand(float3 co) {
+				return frac(sin(dot(co.xy, float2(12.9898, 78.233))) * 43758.5453);
+			}
+
+
 			// Vertex function
 			fragmentInput vert( vertexInput i )
 			{
@@ -79,8 +86,8 @@ Shader "Anclin/Experiments/Vertex Animation"
 				//i.vertex.xyz += i.normal * ( sin( (i.vertex.x + _Time * _Value3) * _Value2 ) + cos( (i.vertex.z + _Time * _Value3) * _Value2 )  ) * _Value1;
 				i.vertex.xyz += i.normal * (sin((i.vertex.x + i.vertex.y + _Time * _Time) * _Value2) + cos(i.vertex.y + i.vertex.z + _Time)) * _Value3 * 0.01;
 				i.vertex.xyz += i.vertex.xyz * (sin((i.vertex.x + i.vertex.y + _Time) * _Value2) + cos(i.vertex.y + i.vertex.z + _Time)) * _Value1;
+				i.vertex.xyz += rand(i.vertex.xyz) * _Value4;
 				//i.vertex.xyz = pos + i.normal * ( sin( (i.vertex.x + _Time * _Value3) * _Value2 )) * _Value1;
-				//i.vertex.y = sin(_Time * 20.0) * 0.2;
 
 
 
@@ -107,6 +114,8 @@ Shader "Anclin/Experiments/Vertex Animation"
 				fixed4 texcol = tex2D (_MainTex, i.uv);
 				return texcol * i.color * attenuation;
 			}
+
+
 
 			ENDCG
 		}

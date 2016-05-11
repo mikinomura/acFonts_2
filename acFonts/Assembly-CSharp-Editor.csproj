@@ -45,7 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Editor\TextureCreatorInspector.cs" />
+     <Compile Include="Assets\shader\Editor\NewEditorTest.cs" />
      <None Include="Assets\shader\vertex animation.shader" />
      <None Include="Assets\shader\Transform Vertex.shader" />
  <Reference Include="UnityEditor.Advertisements">

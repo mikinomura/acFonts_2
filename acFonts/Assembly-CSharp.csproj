@@ -47,6 +47,8 @@
   <ItemGroup>
      <Compile Include="Assets\script\AnalyzeMesh.cs" />
      <Compile Include="Assets\script\ChangeAllChildValue.cs" />
+     <Compile Include="Assets\script\ChangeSameValueToMesh.cs" />
+     <Compile Include="Assets\script\ChangeValue.cs" />
      <Compile Include="Assets\script\DivideMesh.cs" />
      <Compile Include="Assets\script\MeshController.cs" />
      <Compile Include="Assets\script\Noise.cs" />
