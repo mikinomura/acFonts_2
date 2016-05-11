@@ -46,9 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Editor\TextureCreatorInspector.cs" />
-     <Compile Include="Assets\Surface\Editor\SurfaceCreatorInspector.cs" />
      <None Include="Assets\shader\vertex animation.shader" />
-     <None Include="Assets\Surface\Surface Shader.shader" />
      <None Include="Assets\shader\Transform Vertex.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
