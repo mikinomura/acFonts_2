@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/hinge.unity
+- path: Assets/fontsScene/all.unity
   isLoaded: 1
   isActive: 1
