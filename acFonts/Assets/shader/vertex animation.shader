@@ -10,12 +10,11 @@ Shader "Anclin/Experiments/Vertex Animation"
 		_Rotation("Rotation", Float) = 0
 		_MainTex("Base texture", 2D) = "white" {}//テクスチャ
 	}
-	
+
 	SubShader
 	{
 		Pass
 		{
-			//Tags { "LightMode" = "ForwardBase" }
 			Tags {"Queue"="Transparent" "RenderType" = "Transparent" 
 				"LightMode" = "ForwardBase"} // for shadows
 			//透明にするために必要↓
@@ -35,15 +34,17 @@ Shader "Anclin/Experiments/Vertex Animation"
 
 			#include "AutoLight.cginc"
 
+			#include "Lighting.cginc"
+
 			// User defined variables
-			uniform float4 _Color;
+			uniform fixed4 _Color;
 			uniform float _Value1;
 			uniform float _Value2;
 			uniform float _Value3;
 			uniform float _Value4;
-			uniform float4 _MainColor;
+			uniform fixed4 _MainColor;
 			uniform float _Rotation;
-			sampler2D _MainTex;
+			uniform sampler2D _MainTex;
 
 			// Base input structs
 			struct vertexInput
@@ -53,7 +54,7 @@ Shader "Anclin/Experiments/Vertex Animation"
 				float4 texcoord : TEXCOORD0; //1つ目のUV座標セマンティクス
 			};
 
-			struct fragmentInput
+			struct v2f
 			{
 				float4 pos : SV_POSITION;
 				float4 color : COLOR;
@@ -70,9 +71,9 @@ Shader "Anclin/Experiments/Vertex Animation"
 
 
 			// Vertex function
-			fragmentInput vert( vertexInput i )
+			v2f vert( vertexInput i )
 			{
-				fragmentInput o;
+				v2f o;
 
 				// VERTEX ANIMATION ///////////////////////////////////////////////////////////////
 
@@ -95,9 +96,10 @@ Shader "Anclin/Experiments/Vertex Animation"
 
 				// COLOR
 				//o.color = i.texcoord;								// UV
-				//o.color = float4(i.normal, 1 ) * 0.2 +0.5;
-				o.color = float4(_MainColor.r * i.texcoord.x * 0.5 , _MainColor.g * i.texcoord.y * 0.5, _MainColor.b, 1);		// Normals
+				o.color = float4(i.normal, 1 ) * 0.2 +0.5;
+				//o.color = float4(_MainColor.r * i.texcoord.x * 0.5 , _MainColor.g * i.texcoord.y * 0.5, _MainColor.b, 1);		// Normals
 				o.uv = TRANSFORM_TEX (i.texcoord, _MainTex);
+	
 				// This line must be after the vertex manipulation
 				o.pos = mul( UNITY_MATRIX_MVP, i.vertex );
 
@@ -106,13 +108,15 @@ Shader "Anclin/Experiments/Vertex Animation"
 				return o;
 			}
 
+
 			// Fragment function
-			float4 frag( fragmentInput i ) : Color
+			fixed4 frag( v2f i ) : COLOR
 			{	
 				float attenuation = LIGHT_ATTENUATION(i); //for light
-				i.color.a = 0.2;
+				i.color.a = 0.9;
 				fixed4 texcol = tex2D (_MainTex, i.uv);
 				return texcol * i.color * attenuation;
+				//return tex2D(_MainTex, i.uv);
 			}
 
 

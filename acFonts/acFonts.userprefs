@@ -1,15 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/script/ChangeValue.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/shader/vertex animation.shader">
     <Files>
-      <File FileName="Assets/script/AnalyzeMesh.cs" Line="1" Column="1" />
+      <File FileName="Assets/shader/vertex animation.shader" Line="113" Column="5" />
       <File FileName="Assets/script/DivideMesh.cs" Line="1" Column="1" />
-      <File FileName="Assets/shader/vertex animation.shader" Line="80" Column="5" />
       <File FileName="Assets/shader/Transform Vertex.shader" Line="1" Column="1" />
       <File FileName="Assets/script/MeshController.cs" Line="1" Column="1" />
       <File FileName="Assets/script/SplitMeshIntoTriangles.cs" Line="1" Column="1" />
-      <File FileName="Assets/script/ChangeAllChildValue.cs" Line="29" Column="22" />
-      <File FileName="Assets/script/ChangeValue.cs" Line="1" Column="1" />
+      <File FileName="Assets/script/ChangeAllChildValue.cs" Line="1" Column="1" />
+      <File FileName="Assets/script/ChangeSameValueToMesh.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
