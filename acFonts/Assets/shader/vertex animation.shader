@@ -6,16 +6,23 @@ Shader "Anclin/Experiments/Vertex Animation"
 		_Value2( "Value 2", Float ) = 0
 		_Value3( "Value 3", Float ) = 0
 		_Value4( "Value 4", Float) = 0
-		_MainColor("Main Color", Color) = (1.0,1.0,1.0,1.0)
+		_ColorX ("Color X", COLOR) = (1,1,1,1)
+      	_ColorY ("Color Y", COLOR) = (1,1,1,1)
+      	_GradientStrength ("Graident Strength", Float) = 1
+      	_yPosLow ("Y Pos Low", Float) = 0
+      	_yPosHigh ("Y Pos High", Float) = 10
+      	_ColorLow ("Color Low", COLOR) = (1,1,1,1)
+      	_ColorHigh ("Color High", COLOR) = (1,1,1,1)
 		_Rotation("Rotation", Float) = 0
 		_MainTex("Base texture", 2D) = "white" {}//テクスチャ
+		_Tess ("Tessellation", Range(1,32)) = 4
 	}
 
 	SubShader
 	{
 		Pass
 		{
-			Tags {"Queue"="Transparent" "RenderType" = "Transparent" 
+			Tags {"Queue" = "Geometry" "RenderType" = "Transparent" 
 				"LightMode" = "ForwardBase"} // for shadows
 			//透明にするために必要↓
 			Blend SrcAlpha OneMinusSrcAlpha
@@ -42,9 +49,28 @@ Shader "Anclin/Experiments/Vertex Animation"
 			uniform float _Value2;
 			uniform float _Value3;
 			uniform float _Value4;
-			uniform fixed4 _MainColor;
+			fixed4 _ColorLow;
+      		fixed4 _ColorHigh;
+      		fixed4 _ColorX;
+      		fixed4 _ColorY;
+      		half _yPosLow;
+      		half _yPosHigh;
+      		half _GradientStrength;
+      		half _EmissiveStrengh;
 			uniform float _Rotation;
 			uniform sampler2D _MainTex;
+
+			#define RIGHT float3(1,0,0)
+			#define UP float3(0,1,0)
+			#define LEFT float3(0,0,1)
+			#define WHITE3 fixed3(1,1,1)
+
+			float _Tess;
+
+			float4 tessFixed()
+            {
+                return _Tess;
+            }
 
 			// Base input structs
 			struct vertexInput
@@ -95,10 +121,32 @@ Shader "Anclin/Experiments/Vertex Animation"
 				//////////////////////////////////////////////////////////// EO VERTEX ANIMATION //
 
 				// COLOR
-				//o.color = i.texcoord;								// UV
-				o.color = float4(i.normal, 1 ) * 0.2 +0.5;
-				//o.color = float4(_MainColor.r * i.texcoord.x * 0.5 , _MainColor.g * i.texcoord.y * 0.5, _MainColor.b, 1);		// Normals
 				o.uv = TRANSFORM_TEX (i.texcoord, _MainTex);
+
+				// gradient color at this height
+         		half3 gradient = lerp(_ColorLow, _ColorHigh,  smoothstep( _yPosLow, _yPosHigh, i.texcoord.y )).rgb;
+
+         		// lerp the 
+         		gradient = lerp(WHITE3, gradient, _GradientStrength);
+
+				//// add ColorX if the normal is facing positive X-ish
+				half3 finalColor = _ColorX.rgb * max(0,dot(i.normal, RIGHT))* _ColorX.a;
+
+				// add ColorY if the normal is facing positive Y-ish (up)
+        		finalColor += _ColorY.rgb * max(0,dot(i.normal, UP)) * _ColorY.a;
+
+        		// add ColorY if the normal is facing positive Y-ish (up)
+        		finalColor += _ColorY.rgb * max(0,dot(i.normal, LEFT)) * _ColorY.a;
+
+        		// add ColorY if the normal is facing positive Y-ish (up)
+        		finalColor += _ColorY.rgb * max(0,dot(i.normal, LEFT+RIGHT)) * _ColorY.a;
+
+        		finalColor += (_ColorX + _ColorY) / 2;;
+
+				// scale down to 0-1 values
+         		finalColor = saturate(finalColor);
+
+         		o.color = float4(finalColor, 1);
 	
 				// This line must be after the vertex manipulation
 				o.pos = mul( UNITY_MATRIX_MVP, i.vertex );
@@ -113,7 +161,7 @@ Shader "Anclin/Experiments/Vertex Animation"
 			fixed4 frag( v2f i ) : COLOR
 			{	
 				float attenuation = LIGHT_ATTENUATION(i); //for light
-				i.color.a = 0.9;
+				i.color.a = 1;
 				fixed4 texcol = tex2D (_MainTex, i.uv);
 				return texcol * i.color * attenuation;
 				//return tex2D(_MainTex, i.uv);
@@ -126,6 +174,6 @@ Shader "Anclin/Experiments/Vertex Animation"
 	}
 
 	// Fallback commented out during development
-	// Fallback "Diffuse"
-	Fallback "VertexLit"
+	Fallback "Diffuse"
+	//Fallback "VertexLit"
 }

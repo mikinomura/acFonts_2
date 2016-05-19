@@ -18,6 +18,7 @@ public class ChangeAllChildValue : MonoBehaviour {
 	public Slider value2Slider;
 	public Slider value3Slider;
 	public Slider value4Slider;
+	public Button colorBottun;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +28,7 @@ public class ChangeAllChildValue : MonoBehaviour {
 		value2Slider.onValueChanged.AddListener (delegate {ChangeParameter ();});
 		value3Slider.onValueChanged.AddListener (delegate {ChangeParameter ();});
 		value4Slider.onValueChanged.AddListener (delegate {ChangeParameter ();});
+		colorBottun.onClick.AddListener(delegate {ChangeColor ();});
 	}
 	
 	// Update is called once per frame
@@ -55,4 +57,17 @@ public class ChangeAllChildValue : MonoBehaviour {
 			renderers [i].material.SetFloat ("_Value4", value4);
 		}
 	}
+
+	void ChangeColor(){
+		Renderer[] renderers = GetComponentsInChildren<Renderer> ();
+		Color randomColor = new Color(Random.Range(0f,1f), Random.Range(0f,1f), Random.Range(0f,1f), 1);
+		print (randomColor);
+		for (int i = 0; i < renderers.Length; i++) {
+			randomColor = new Color(Random.Range(0,1), Random.Range(0,1), Random.Range(0,1), 1);
+			print(renderers [i].material.GetColor("_ColorY"));
+			renderers [i].material.SetColor ("_ColorY", randomColor);
+		}
+
+	}
+
 }
