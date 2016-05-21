@@ -15,6 +15,7 @@ Shader "Anclin/Experiments/Vertex Animation"
       	_ColorHigh ("Color High", COLOR) = (1,1,1,1)
 		_Rotation("Rotation", Float) = 0
 		_MainTex("Base texture", 2D) = "white" {}//テクスチャ
+		_BumpMap ("Noise text", 2D) = "bump" {}
 		_Tess ("Tessellation", Range(1,32)) = 4
 	}
 
@@ -59,6 +60,7 @@ Shader "Anclin/Experiments/Vertex Animation"
       		half _EmissiveStrengh;
 			uniform float _Rotation;
 			uniform sampler2D _MainTex;
+			uniform sampler2D _BumpMap;
 
 			#define RIGHT float3(1,0,0)
 			#define UP float3(0,1,0)
@@ -146,7 +148,7 @@ Shader "Anclin/Experiments/Vertex Animation"
 				// scale down to 0-1 values
          		finalColor = saturate(finalColor);
 
-         		o.color = float4(finalColor, 1);
+         		o.color = float4(finalColor, 0.8);
 	
 				// This line must be after the vertex manipulation
 				o.pos = mul( UNITY_MATRIX_MVP, i.vertex );
@@ -161,10 +163,11 @@ Shader "Anclin/Experiments/Vertex Animation"
 			fixed4 frag( v2f i ) : COLOR
 			{	
 				float attenuation = LIGHT_ATTENUATION(i); //for light
-				i.color.a = 1;
 				fixed4 texcol = tex2D (_MainTex, i.uv);
+				//half4 bump = tex2D(_BumpMap, i.texcoord);
+				//half2 distortion = UnpackNormal(bump).rg;
 				return texcol * i.color * attenuation;
-				//return tex2D(_MainTex, i.uv);
+
 			}
 
 

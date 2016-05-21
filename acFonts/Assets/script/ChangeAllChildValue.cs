@@ -13,6 +13,8 @@ public class ChangeAllChildValue : MonoBehaviour {
 	private GameObject Value2SliderGet;
 	private GameObject Value3SliderGet;
 	private GameObject Value4SliderGet;
+	private Color randomColorX;
+	private Color randomColorY;
 
 	public Slider value1Slider;
 	public Slider value2Slider;
@@ -24,6 +26,8 @@ public class ChangeAllChildValue : MonoBehaviour {
 	void Start () {
 		//Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		//Adds a listener to the main slider and invokes a method when the value changes.
+		ChangeColor();
+
 		value1Slider.onValueChanged.AddListener (delegate {ChangeParameter ();});
 		value2Slider.onValueChanged.AddListener (delegate {ChangeParameter ();});
 		value3Slider.onValueChanged.AddListener (delegate {ChangeParameter ();});
@@ -60,12 +64,12 @@ public class ChangeAllChildValue : MonoBehaviour {
 
 	void ChangeColor(){
 		Renderer[] renderers = GetComponentsInChildren<Renderer> ();
-		Color randomColor = new Color(Random.Range(0f,1f), Random.Range(0f,1f), Random.Range(0f,1f), 1);
-		print (randomColor);
+		randomColorX = new Color(Random.value, Random.value, Random.value, 1.0F);
+		randomColorY = new Color(Random.value, Random.value, Random.value, 1.0F);
+
 		for (int i = 0; i < renderers.Length; i++) {
-			randomColor = new Color(Random.Range(0,1), Random.Range(0,1), Random.Range(0,1), 1);
-			print(renderers [i].material.GetColor("_ColorY"));
-			renderers [i].material.SetColor ("_ColorY", randomColor);
+			renderers [i].material.SetColor ("_ColorX", randomColorX);
+			renderers [i].material.SetColor ("_ColorY", randomColorY);
 		}
 
 	}
